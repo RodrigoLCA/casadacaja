@@ -46,6 +46,9 @@ export default function Navigation({current, lang})
                             active={current==='contato'??"true"}
                             >Contato</Nav.Link>
 
+                        <Nav.Link href="/login">Login</Nav.Link>
+
+
                         <NavDropdown title={lang==='br'||lang==undefined?"Português":"English"} id="language-nav-dropdown">
                             <NavDropdown.Item href="#">Português</NavDropdown.Item>
                             <NavDropdown.Item href="#">English</NavDropdown.Item>

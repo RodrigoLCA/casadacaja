@@ -3,6 +3,7 @@ import './bs.min.css'
 import Layout from './components/Layout';
 import { Route, Routes } from 'react-router-dom'
 import IndexPage from './pages/IndexPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route path={"/ponto-cultural"} element={
           <div>Conheça o ponto cultural!!</div>
         } />
+
+        <Route path={"/login"} element={<LoginPage />} />
 
       </Route>
     </Routes>
