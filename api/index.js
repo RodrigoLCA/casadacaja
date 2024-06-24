@@ -3,6 +3,7 @@ import cors from "cors"
 import { userAuth } from "./models/User.js"
 import jwt from "jsonwebtoken"
 import "dotenv/config"
+import cookieParser from "cookie-parser"
 
 const app = express()
 
@@ -16,9 +17,29 @@ app.use(cors({
     origin: true,
 }))
 app.use(express.json())
+app.use(cookieParser())
 
 app.get("/", (req, res) => {
     res.json('test ok!')
+})
+
+/* criação da área interna de administração */
+app.get('/area', (req, res) => {
+
+    const { token } = req.cookies;
+
+    // se o token não existir, o usuário
+    // teoricamente não tem login. retorna 501
+
+    if( token !== undefined) {
+
+        // token existe. verifica?
+        jwt.verify(token, jwt_secret, {}, (err, info) => {
+            if( err ) throw err;
+
+            res.json(info);
+        })
+    } else res.status(501).send()
 })
 
 app.post("/login", (req, res) => {
