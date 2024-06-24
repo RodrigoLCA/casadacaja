@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
+import { Navigate } from 'react-router-dom'
 
 export default function LoginPage() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [redirect, setRedirect] = useState(false)
 
     async function login(ev) {
         ev.preventDefault();
@@ -12,9 +14,21 @@ export default function LoginPage() {
                 method: "POST",
                 body: JSON.stringify({username, password}),
                 headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+
             })
 
+            // Deu certo? Redirecionaremos para homepage
+            if(response.ok) {
+                setRedirect(true)
+            } else {
+                alert('Usuário ou senha incorretos')
+            }
             
+    }
+
+    if (redirect) {
+        return <Navigate to={'/'} />
     }
 
     return (
