@@ -3,25 +3,38 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import Logo from '../assets/images/navlogo.png'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { UserContext } from '../userContext'
 
 
 export default function Navigation({current, lang})
 {
-    const [username, setUsername] = useState(null)
+    const {setUserInfo, userInfo} = useContext(UserContext)
 
     useEffect(() => {
+        console.log("ajax o tempo todo")
         fetch('http://localhost:3333/area', {
             credentials: 'include'
         }).then(response => {
             // not forbidden
             if(response.status != 501) {
                 response.json().then(info => {
-                    setUsername(info.username)
+                    setUserInfo(info)
                 })
             }
         })
-    })
+    }, [])
+
+    function logout() {
+        fetch('http://localhost:3333/logout', {
+            credentials: 'include',
+            method: 'POST'
+        })
+
+        setUserInfo(null)
+    }
+
+    const username = userInfo?.username
 
     return (
         <Navbar expand="lg" bg="light" data-bs-theme="light">
@@ -44,7 +57,7 @@ export default function Navigation({current, lang})
 
                         {username && (
                             <>
-                                <Nav.Link href="/logout">Sair</Nav.Link>
+                                <Nav.Link onClick={() => {logout()}}>Sair</Nav.Link>
                             </>
                         )}
 

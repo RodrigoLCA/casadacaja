@@ -4,23 +4,26 @@ import Layout from './components/Layout';
 import { Route, Routes } from 'react-router-dom'
 import IndexPage from './pages/IndexPage';
 import LoginPage from './pages/LoginPage';
+import { UserContextProvider } from './userContext';
 
 function App() {
   return (
-    <Routes>
-      
-      <Route path="/" element={ <Layout /> }>
+    <UserContextProvider>
+      <Routes>
+        
+        <Route path="/" element={ <Layout /> }>
 
-        <Route index element={ <IndexPage />} />
+          <Route index element={ <IndexPage />} />
 
-        <Route path={"/ponto-cultural"} element={
-          <div>Conheça o ponto cultural!!</div>
-        } />
+          <Route path={"/ponto-cultural"} element={
+            <div>Conheça o ponto cultural!!</div>
+          } />
 
-        <Route path={"/login"} element={<LoginPage />} />
+          <Route path={"/login"} element={<LoginPage />} />
 
-      </Route>
-    </Routes>
+        </Route>
+      </Routes>
+    </UserContextProvider>
   );
 }
 

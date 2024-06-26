@@ -31,7 +31,9 @@ app.get('/area', (req, res) => {
     // se o token não existir, o usuário
     // teoricamente não tem login. retorna 501
 
-    if( token !== undefined) {
+    console.log(typeof token)
+    console.log(token)
+    if( token !== undefined && token) {
 
         // token existe. verifica?
         jwt.verify(token, jwt_secret, {}, (err, info) => {
@@ -40,6 +42,10 @@ app.get('/area', (req, res) => {
             res.json(info);
         })
     } else res.status(501).send()
+})
+
+app.post('/logout', (req, res) => {
+    res.cookie("token", "").status(200).send()
 })
 
 app.post("/login", (req, res) => {
@@ -61,7 +67,10 @@ app.post("/login", (req, res) => {
             }, jwt_secret, {}, (err, token) => {
                 if( err ) throw err;
 
-                res.cookie('token', token).json('OK')
+                res.cookie('token', token).json({
+                    id: data.id,
+                    username: username
+                })
             })
         }
     
