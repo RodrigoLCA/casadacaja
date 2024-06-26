@@ -1,5 +1,6 @@
-import './App.css'
-import './bs.min.css'
+//import './bs.min.css'
+//import './App.css'
+import './global.scss'
 import Layout from './components/Layout';
 import { Route, Routes } from 'react-router-dom'
 import IndexPage from './pages/IndexPage';

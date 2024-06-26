@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import { Button, Card, CardBody, Container, Form, Row } from 'react-bootstrap'
 import { Navigate } from 'react-router-dom'
 import { UserContext } from '../userContext'
 
@@ -39,31 +39,40 @@ export default function LoginPage() {
     }
 
     return (
-        <div className='mx-4 mt-4'>
-            <h1 className='text-center'>Acesso</h1>
-            <Form method='post' onSubmit={login}>
-                <Form.Group className="mb-3 "
-                    controlId="formEmail">
-                        <Form.Label>E-mail</Form.Label>
-                        <Form.Control type="email"
-                            placeholder="E-mail"
-                            value={username}
-                            onChange={ev => setUsername(ev.target.value)}/>
-                </Form.Group>
+        <Container>
+            <Row>
+                <Card className="my-4">
+                    <CardBody>
+                        <div className='mx-4 mt-4'>
+                            <h1 className='text-center'>Acesso</h1>
+                            <Form method='post' onSubmit={login}>
+                                <Form.Group className="mb-3 "
+                                    controlId="formEmail">
+                                        <Form.Label>E-mail</Form.Label>
+                                        <Form.Control type="email"
+                                            placeholder="E-mail"
+                                            value={username}
+                                            onChange={ev => setUsername(ev.target.value)}/>
+                                </Form.Group>
 
-                <Form.Group className="mb-3"
-                    controlId="formPassword">
-                        <Form.Label>Senha</Form.Label>
-                        <Form.Control type="password"
-                            placeholder="Senha"
-                            value={password}
-                            onChange={ev => setPassword(ev.target.value)}/>
-                </Form.Group>
+                                <Form.Group className="mb-3"
+                                    controlId="formPassword">
+                                        <Form.Label>Senha</Form.Label>
+                                        <Form.Control type="password"
+                                            placeholder="Senha"
+                                            value={password}
+                                            onChange={ev => setPassword(ev.target.value)}/>
+                                </Form.Group>
 
-                <Button variant="primary" type="submit">
-                    Acessar
-                </Button>
-            </Form>
-        </div>
+                                <Button variant="primary" type="submit">
+                                    Acessar
+                                </Button>
+                            </Form>
+                        </div>
+                    </CardBody>
+                </Card>
+            </Row>
+        </Container>
+    
     )
 }

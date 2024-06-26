@@ -1,0 +1,15 @@
+body {
+    background-color: rgb(255, 148, 13)!important;
+}
+
+// card y spacing
+$card-spacer-y: 1.2rem;
+
+header .nav-link {
+    --bs-nav-link-color: #255400;
+    text-transform: uppercase
+}
+// var(--bs-navbar-color): red;
+
+// chamar o bootstrap
+@import "~bootstrap/scss/bootstrap";
