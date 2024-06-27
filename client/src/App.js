@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import IndexPage from './pages/IndexPage';
 import LoginPage from './pages/LoginPage';
 import { UserContextProvider } from './userContext';
+import CreatePost from './pages/CreatePost';
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           <Route path={"/ponto-cultural"} element={
             <div>Conheça o ponto cultural!!</div>
           } />
+
+          <Route path={"/publicacoes/nova"} element={<CreatePost />} />
 
           <Route path={"/login"} element={<LoginPage />} />
 

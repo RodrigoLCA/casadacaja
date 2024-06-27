@@ -57,6 +57,8 @@ export default function Navigation({current, lang})
 
                         {username && (
                             <>
+                                <Nav.Link href='/publicacoes/nova'>Publicações</Nav.Link>
+                                <Nav.Link onClick={() => {}}>Configurações</Nav.Link>
                                 <Nav.Link onClick={() => {logout()}}>Sair</Nav.Link>
                             </>
                         )}
