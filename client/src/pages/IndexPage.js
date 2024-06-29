@@ -1,14 +1,30 @@
+import { useEffect, useState } from "react";
 import { Card, CardBody, Container, Row } from "react-bootstrap";
 
 export default function IndexPage() {
+
+    const [posts, setPosts] = useState([])
+
+    useEffect(() => {
+        fetch("http://localhost:3333/post/list").then(response => {
+            response.json().then(posts => {
+                setPosts(posts)
+
+                
+            })
+        })
+    }, [])
+
     return (
         <Container>
             <Row>
-                <Card className="my-4">
+                {posts.length > 0 && posts.map(post => (
+                    <Card className="my-4">
                     <CardBody>
-                        Olá, mundo!
+                        {post.titulo}
                     </CardBody>
                 </Card>
+                ))}
             </Row>
         </Container>
     )

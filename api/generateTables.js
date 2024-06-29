@@ -17,6 +17,28 @@ async function generateUsuarioTable() {
     })
 }
 
+async function generateNoticiaTable() {
+    await sql`
+        CREATE TABLE noticia (
+            id SERIAL PRIMARY KEY,
+            titulo VARCHAR(255),
+            subtitulo VARCHAR(255),
+            conteudo TEXT,
+            data_publicacao TIMESTAMP,
+            id_categoria INT,
+            imagem VARCHAR(255),
+            status VARCHAR(10) CHECK (status IN ('publicado', 'rascunho')),
+            visualizacoes INT,
+            destaque BOOLEAN,
+            id_autor INT
+        );
+    `.then(() => {
+        console.log("Tabela de Notícias gerada com sucesso!")
+
+        return true
+    })
+}
+
 async function createSuperUser() {
     
     const saltRounds = 10;

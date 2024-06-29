@@ -4,6 +4,10 @@ import { userAuth } from "./models/User.js"
 import jwt from "jsonwebtoken"
 import "dotenv/config"
 import cookieParser from "cookie-parser"
+import multer from "multer"
+import fs from "fs"
+import { join } from "path"
+import { listPost, postCreate } from "./models/Post.js"
 
 const app = express()
 
@@ -46,6 +50,54 @@ app.get('/area', (req, res) => {
 
 app.post('/logout', (req, res) => {
     res.cookie("token", "").status(200).send()
+})
+
+app.get("/post/list", async (req, res) => {
+    const obterPosts = await listPost()
+
+
+    res.json(obterPosts).send()
+})
+
+/* Na rota /post/create nós iremos capturar as informações
+   Vindas do usuário, e inclusive a imagem que ele enviou
+   Para salvar no banco de dados, e fornecer de volta uma resposta.
+   */
+const uploadMiddleware = multer({ dest: "uploads" })
+app.post("/post/create", uploadMiddleware.single("capa"), async (req, res) => {
+
+    const { token } = req.cookies;
+
+    if(token !== undefined && token) {
+        jwt.verify(token, jwt_secret, {}, async (err, info) => {
+            if( err ) throw err
+
+            const {titulo, resumo, conteudo} = req.body
+            const {originalname, path} = req.file;
+
+            const parts = originalname.split("."),
+                  DOT = '.',
+                  ext = parts[parts.length-1],
+                  newPath = [path, ext].join(DOT)
+
+            fs.renameSync(path, newPath)
+
+            await postCreate({
+                titulo,
+                resumo,
+                conteudo,
+                capa: newPath,
+                user_id: info.id
+            })
+
+            console.log(postCreate)
+        })
+    } else {
+        res.status(404).json({status:"User not allowed to perform this action."})
+    }
+
+    
+
 })
 
 app.post("/login", (req, res) => {

@@ -2,6 +2,7 @@ import { useState } from "react"
 import {Container, Row, Card, CardBody, Form, FloatingLabel, Button} from "react-bootstrap"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
+import { Navigate } from "react-router-dom"
 
 const modules = {
     toolbar: [
@@ -25,6 +26,35 @@ export default function CreatePost()
     const [titulo, setTitulo] = useState("")
     const [resumo, setResumo] = useState("")
     const [conteudo, setConteudo] = useState("")
+    const [capa, setCapa] = useState("")
+    const [redirect, setRedirect] = useState(false)
+
+    async function createNewPost(ev) {
+        
+
+        const data = new FormData();
+        data.set('titulo', titulo)
+        data.set('resumo', resumo)
+        data.set('conteudo', conteudo)
+        data.set('capa', capa[0])
+
+
+        ev.preventDefault()
+
+        const response = await fetch('http://localhost:3333/post/create', {
+            method: "POST",
+            body: data,
+            credentials: "include"
+        })
+
+        if(response.ok) {
+            setRedirect(true)
+        }
+    }
+
+    if(redirect) {
+        <Navigate to={"/"} />
+    }
 
     return (
         <Container>
@@ -34,7 +64,7 @@ export default function CreatePost()
                         <div className='mx-4 mt-4'>
                             <h1 className='text-center'>Nova Publicação</h1>
                             <hr />
-                            <Form>
+                            <Form onSubmit={createNewPost}>
                                 <Form.Group className="mb-3" controlId="pubTitulo">
                                     <FloatingLabel
                                         controlId="pubTitulo"
@@ -61,6 +91,8 @@ export default function CreatePost()
                                         />
                                     </FloatingLabel>
                                 </Form.Group>
+                                <Form.Control type="file" className="mb-3"
+                                    onChange={ev => setCapa(ev.target.files)}/>
                                 <ReactQuill value={conteudo} onChange={setConteudo} modules={modules} formats={formats}/>
                                 <div className="d-grid gap-2 mt-3">
                                     <Button type="submit" variant="success">Publicar</Button>
