@@ -1,6 +1,19 @@
 import postgres from "postgres";
 import sql from "../db.js";
 
+export async function fetchOnePost(id = null)
+{
+    try {
+        const obterPost = await sql`
+            SELECT * FROM noticia WHERE id=${id} LIMIT 1
+        `
+
+        return obterPost
+    } catch (err) {
+        console.log("Erro ao capturar uma publicação", err.stack)
+    }
+}
+
 export async function listPost(category = null)
 {
     try {
@@ -11,6 +24,40 @@ export async function listPost(category = null)
         return obterPosts
     } catch (err) {
         console.log("Erro ao capturar dados:", err.stack)
+    }
+}
+
+export async function postUpdate(id, data)
+{
+    const {titulo, resumo, conteudo, capa} = data
+    const post_id = id;
+
+    try {
+
+        if(capa) {
+            await sql`
+                UPDATE noticia
+                SET titulo=${titulo},
+                    subtitulo=${resumo},
+                    conteudo=${conteudo},
+                    imagem=${capa}
+                WHERE id = ${post_id};
+            ` 
+        } else {
+            await sql`
+                UPDATE noticia
+                SET titulo=${titulo},
+                    subtitulo=${resumo},
+                    conteudo=${conteudo}
+                WHERE id = ${post_id};
+            ` 
+        }
+
+        console.log("Publicação atualizada!")
+        return true;
+    } catch(err) {
+        console.log("Erro ao atualizar dados", err)
+        return true;
     }
 }
 

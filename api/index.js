@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser"
 import multer from "multer"
 import fs from "fs"
 import { join } from "path"
-import { listPost, postCreate } from "./models/Post.js"
+import { fetchOnePost, listPost, postCreate, postUpdate } from "./models/Post.js"
 
 const app = express()
 
@@ -22,6 +22,7 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(cookieParser())
+app.use("/uploads", express.static("uploads"))
 
 app.get("/", (req, res) => {
     res.json('test ok!')
@@ -53,10 +54,25 @@ app.post('/logout', (req, res) => {
 })
 
 app.get("/post/list", async (req, res) => {
-    const obterPosts = await listPost()
+    try {
+        const obterPosts = await listPost().then(response => {
+            res.json(response).send()
+        })
+    } catch(err) {
+        console.log("Erro em obter as publicações", err)
+    }
+})
 
+app.get("/post/:id", async (req, res) => {
+    const post_id = req.params.id
 
-    res.json(obterPosts).send()
+    const obterPost = await fetchOnePost(post_id).then(response => {
+        res.json(response).send()
+    })
+})
+
+app.get("/configuracoes", (req, res) => {
+
 })
 
 /* Na rota /post/create nós iremos capturar as informações
@@ -89,8 +105,6 @@ app.post("/post/create", uploadMiddleware.single("capa"), async (req, res) => {
                 capa: newPath,
                 user_id: info.id
             })
-
-            console.log(postCreate)
         })
     } else {
         res.status(404).json({status:"User not allowed to perform this action."})
@@ -98,6 +112,42 @@ app.post("/post/create", uploadMiddleware.single("capa"), async (req, res) => {
 
     
 
+})
+
+app.put("/post/:id", uploadMiddleware.single("capa"), async(req, res) => {
+
+    let newPath = '';
+    const {post_id, titulo, resumo, conteudo} = req.body
+    const { token } = req.cookies;
+
+    if(token !== undefined && token) {
+        jwt.verify(token, jwt_secret, {}, async (err, info) => {
+            if( err ) throw err
+
+            if(req.file) {
+                const {originalname, path} = req.file;
+
+                const parts = originalname.split("."),
+                    DOT = '.',
+                    ext = parts[parts.length-1]
+
+
+                newPath = [path, ext].join(DOT)
+
+                fs.renameSync(path, newPath)
+            }
+
+
+            const _updatePost = await postUpdate(post_id, {
+                titulo, resumo, conteudo,
+                capa: newPath,
+                user_id: info.id
+            })
+        })
+    }
+
+    res.json("ok")
+    // res.json(req.file)
 })
 
 app.post("/login", (req, res) => {

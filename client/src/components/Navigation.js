@@ -5,6 +5,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import Logo from '../assets/images/navlogo.png'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../userContext'
+import { Navigate } from 'react-router-dom'
 
 
 export default function Navigation({current, lang})
@@ -58,8 +59,8 @@ export default function Navigation({current, lang})
                         {username && (
                             <>
                                 <Nav.Link href='/publicacoes/nova'>Publicações</Nav.Link>
-                                <Nav.Link onClick={() => {}}>Configurações</Nav.Link>
-                                <Nav.Link onClick={() => {logout()}}>Sair</Nav.Link>
+                                <Nav.Link href='/configuracoes'>Configurações</Nav.Link>
+                                <Nav.Link href='/' onClick={() => {logout()}}>Sair</Nav.Link>
                             </>
                         )}
 

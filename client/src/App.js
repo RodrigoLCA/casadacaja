@@ -7,8 +7,12 @@ import IndexPage from './pages/IndexPage';
 import LoginPage from './pages/LoginPage';
 import { UserContextProvider } from './userContext';
 import CreatePost from './pages/CreatePost';
+import ConfigPage from './pages/ConfigPage';
+import SinglePostPage from './pages/SinglePostPage';
+import EditSinglePostPage from './pages/EditSinglePostPage';
 
 function App() {
+  
   return (
     <UserContextProvider>
       <Routes>
@@ -24,6 +28,11 @@ function App() {
           <Route path={"/publicacoes/nova"} element={<CreatePost />} />
 
           <Route path={"/login"} element={<LoginPage />} />
+
+          <Route path={"/:id/"} element={<SinglePostPage />} />
+          <Route path={"/:id/edit"} element={<EditSinglePostPage />} />
+
+          <Route path={"/configuracoes"} element={<ConfigPage />} />
 
         </Route>
       </Routes>
